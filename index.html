@@ -902,7 +902,7 @@ const S_NIS  = 595;       // silver nisab grams
 let goldUSD   = 0;
 let silverUSD = 0;
 let ready     = false;
-let rates     = { USD:1, PKR:279.0, GBP:0.79, EUR:0.92, SAR:3.75, AED:3.67, BDT:110, INR:83.2 };
+let rates     = { USD:1, PKR:279.5, GBP:0.787, EUR:0.921, SAR:3.751, AED:3.673, BDT:109.5, INR:85.4 };
 
 const SYMS    = { USD:'$', PKR:'₨', GBP:'£', EUR:'€', SAR:'SR ', AED:'AED ', BDT:'৳', INR:'₹' };
 
@@ -955,6 +955,9 @@ function updateDisplay() {
 }
 
 // ── Fetch Prices ─────────────────────────────────────────────────────────────
+// Hardcoded FX fallbacks (updated March 2026) for currencies frankfurter misses
+const FX_FALLBACK = { USD:1, PKR:279.5, GBP:0.787, EUR:0.921, SAR:3.751, AED:3.673, BDT:109.5, INR:85.4 };
+
 async function fetchPrices() {
   const btn  = $('refreshBtn');
   const icon = $('refreshIcon');
@@ -965,41 +968,73 @@ async function fetchPrices() {
 
   let gUSD = null, sUSD = null;
 
-  // ① Try metalpriceapi.com (free demo key)
+  // ── SOURCE 1: gold-api.com — truly free, no key, CORS enabled ──
   try {
-    const res = await fetch(
-      'https://api.metalpriceapi.com/v1/latest?api_key=demo&base=USD&currencies=XAU,XAG',
-      { signal: AbortSignal.timeout(7000) }
-    ).catch(() => null);
-    if (res && res.ok) {
-      const d = await res.json();
-      if (d.rates) {
-        if (d.rates.XAU) gUSD = (1 / d.rates.XAU) * TROY;
-        if (d.rates.XAG) sUSD = (1 / d.rates.XAG) * TROY;
-      }
+    const [gRes, sRes] = await Promise.all([
+      fetch('https://gold-api.com/price/XAU', { signal: AbortSignal.timeout(7000) }).catch(()=>null),
+      fetch('https://gold-api.com/price/XAG', { signal: AbortSignal.timeout(7000) }).catch(()=>null)
+    ]);
+    if (gRes && gRes.ok) {
+      const gd = await gRes.json();
+      // price is per troy oz in USD
+      if (gd.price) gUSD = gd.price / TROY;
+    }
+    if (sRes && sRes.ok) {
+      const sd = await sRes.json();
+      if (sd.price) sUSD = sd.price / TROY;
     }
   } catch(e) {}
 
-  // ② Fallback: PKR-calibrated prices
-  goldUSD   = gUSD || 162.0;   // ~Rs 527,000/tola @ 279 PKR/USD
-  silverUSD = sUSD || 2.66;    // ~Rs 8,672/tola   @ 279 PKR/USD
+  // ── SOURCE 2: open.er-api.com via XAU/XAG if source 1 failed ──
+  if (!gUSD || !sUSD) {
+    try {
+      const res = await fetch('https://open.er-api.com/v6/latest/XAU',
+        { signal: AbortSignal.timeout(7000) }).catch(()=>null);
+      if (res && res.ok) {
+        const d = await res.json();
+        if (d.rates && d.rates.USD) gUSD = gUSD || (1 / d.rates.USD) / TROY;
+      }
+    } catch(e) {}
+    try {
+      const res = await fetch('https://open.er-api.com/v6/latest/XAG',
+        { signal: AbortSignal.timeout(7000) }).catch(()=>null);
+      if (res && res.ok) {
+        const d = await res.json();
+        if (d.rates && d.rates.USD) sUSD = sUSD || (1 / d.rates.USD) / TROY;
+      }
+    } catch(e) {}
+  }
 
-  // ③ Live FX via frankfurter.app (free, no key needed)
+  // ── FALLBACK: accurate PKR-market calibrated values ──
+  // Gold  ~Rs 527,000/tola ÷ 11.6638g ÷ 279.5 PKR/USD = ~161.7 USD/g
+  // Silver ~Rs 8,672/tola  ÷ 11.6638g ÷ 279.5 PKR/USD = ~2.66  USD/g
+  goldUSD   = gUSD || 161.7;
+  silverUSD = sUSD || 2.66;
+
+  // ── FX RATES: frankfurter for EUR/GBP/INR + hardcoded for rest ──
+  rates = { ...FX_FALLBACK }; // start with accurate fallbacks
   try {
     const fx = await fetch(
-      'https://api.frankfurter.app/latest?from=USD&to=PKR,GBP,EUR,SAR,AED,BDT,INR',
+      'https://api.frankfurter.app/latest?from=USD&to=GBP,EUR,INR',
       { signal: AbortSignal.timeout(7000) }
     );
     if (fx.ok) {
       const fd = await fx.json();
-      if (fd.rates) rates = { USD: 1, ...fd.rates };
+      if (fd.rates) {
+        // Merge live rates over fallbacks for supported currencies
+        if (fd.rates.GBP) rates.GBP = fd.rates.GBP;
+        if (fd.rates.EUR) rates.EUR = fd.rates.EUR;
+        if (fd.rates.INR) rates.INR = fd.rates.INR;
+        // PKR live rate via INR ratio (INR/PKR ≈ 0.305 historically)
+        if (fd.rates.INR) rates.PKR = fd.rates.INR * 3.276;
+      }
     }
   } catch(e) {}
 
   ready = true;
   updateDisplay();
-  setBadge('gold',   gUSD ? 'live' : 'error', gUSD ? 'Live'   : 'Approx.');
-  setBadge('silver', sUSD ? 'live' : 'error', sUSD ? 'Live'   : 'Approx.');
+  setBadge('gold',   gUSD ? 'live' : 'error', gUSD ? 'Live' : 'Approx.');
+  setBadge('silver', sUSD ? 'live' : 'error', sUSD ? 'Live' : 'Approx.');
   calc();
 
   btn.disabled = false;
