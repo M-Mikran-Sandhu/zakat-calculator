@@ -1,139 +1,158 @@
-<!-- ============================================================
-     ZAKAT CALCULATOR — WordPress Ready
-     By Alpha Solutions Services LLC | alphasolutions.online
-     Paste this into: WordPress Editor > Custom HTML block
-     OR use a plugin like "Insert Headers and Footers" / Elementor HTML widget
-     ============================================================ -->
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free Zakat Calculator with live gold and silver prices. Calculate your annual Zakat obligation instantly. By Alpha Solutions Services LLC.">
+<title>Zakat Calculator — حاسبة الزكاة | Alpha Solutions Services LLC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-
 <style>
-/* ── All styles scoped under #zakat-app to avoid WordPress theme conflicts ── */
-#zakat-app {
-  --zk-gold: #C9A84C;
-  --zk-gold-light: #E8C97A;
-  --zk-gold-dark: #8B6914;
-  --zk-silver: #9BA8B0;
-  --zk-silver-light: #C8D6DD;
-  --zk-bg: #0D1117;
-  --zk-card: #161B22;
-  --zk-card2: #1C2128;
-  --zk-text: #E6EDF3;
-  --zk-muted: #7D8590;
-  --zk-border: rgba(201,168,76,0.18);
-  --zk-green: #3FB950;
-  all: initial;
-  display: block;
+/* ══════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
   font-family: 'Lato', sans-serif;
-  background: var(--zk-bg);
-  color: var(--zk-text);
-  border-radius: 16px;
-  overflow: hidden;
-  position: relative;
+  background: #0D1117;
+  color: #E6EDF3;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.5;
 }
 
-#zakat-app *, #zakat-app *::before, #zakat-app *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-#zakat-app::before {
+/* Ambient glow bg */
+body::before {
   content: '';
-  position: absolute;
+  position: fixed;
   inset: 0;
   background:
     radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201,168,76,0.09) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 110%, rgba(155,168,176,0.05) 0%, transparent 60%);
+    radial-gradient(ellipse 60% 40% at 85% 110%, rgba(155,168,176,0.05) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
 
-#zakat-app .zk-wrap {
-  max-width: 960px;
+/* ══════════════════════════════════════════════
+   CSS VARIABLES
+══════════════════════════════════════════════ */
+:root {
+  --gold:         #C9A84C;
+  --gold-light:   #E8C97A;
+  --gold-dark:    #8B6914;
+  --silver:       #9BA8B0;
+  --silver-light: #C8D6DD;
+  --bg:           #0D1117;
+  --card:         #161B22;
+  --card2:        #1C2128;
+  --text:         #E6EDF3;
+  --muted:        #7D8590;
+  --border:       rgba(201,168,76,0.18);
+  --green:        #3FB950;
+  --blue:         #79C0FF;
+  --red:          #FF7B72;
+}
+
+/* ══════════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════════ */
+.wrap {
+  max-width: 980px;
   margin: 0 auto;
-  padding: 40px 20px 60px;
+  padding: 48px 20px 80px;
   position: relative;
   z-index: 1;
 }
 
-/* ── Header ── */
-#zakat-app .zk-header {
+/* ══════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════ */
+.site-header {
   text-align: center;
-  margin-bottom: 40px;
-  animation: zk-fadeDown 0.8s ease both;
+  margin-bottom: 44px;
+  animation: fadeDown 0.8s ease both;
 }
-#zakat-app .zk-bismillah {
-  font-size: 13px;
-  letter-spacing: 5px;
-  color: var(--zk-gold);
-  margin-bottom: 10px;
-  opacity: 0.85;
+
+.bismillah {
   display: block;
+  font-size: 15px;
+  letter-spacing: 5px;
+  color: var(--gold);
+  margin-bottom: 12px;
+  opacity: 0.85;
 }
-#zakat-app .zk-header h2 {
-  font-family: 'Cinzel', serif !important;
-  font-size: clamp(26px, 5vw, 44px) !important;
-  font-weight: 700 !important;
-  background: linear-gradient(135deg, var(--zk-gold-light) 0%, var(--zk-gold) 50%, var(--zk-gold-dark) 100%);
+
+.site-header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(28px, 5.5vw, 50px);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: 2px;
-  line-height: 1.15 !important;
-  margin: 0 !important;
-  border: none !important;
-  padding: 0 !important;
-}
-#zakat-app .zk-header p {
-  margin-top: 12px !important;
-  color: var(--zk-muted);
-  font-size: 14px;
-  font-weight: 300;
-}
-#zakat-app .zk-divider {
-  width: 120px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--zk-gold), transparent);
-  margin: 16px auto 0;
+  line-height: 1.1;
 }
 
-/* ── Currency Bar ── */
-#zakat-app .zk-topbar {
+.site-header .subtitle {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+}
+
+.divider {
+  width: 130px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 18px auto 0;
+}
+
+/* ══════════════════════════════════════════════
+   TOP BAR (currency + nisab + refresh)
+══════════════════════════════════════════════ */
+.topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex-wrap: wrap;
-  background: var(--zk-card);
-  border: 1px solid var(--zk-border);
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 12px 18px;
-  margin-bottom: 24px;
-  animation: zk-fadeUp 0.8s 0.1s ease both;
+  padding: 13px 20px;
+  margin-bottom: 26px;
+  animation: fadeUp 0.8s 0.1s ease both;
 }
-#zakat-app .zk-topbar-left {
+
+.topbar-left {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
-#zakat-app label {
+
+.topbar label {
   font-size: 12px;
-  color: var(--zk-muted);
-  display: inline;
-  margin: 0 !important;
-  padding: 0 !important;
-  font-weight: 400;
+  color: var(--muted);
+  white-space: nowrap;
 }
-#zakat-app select {
-  background: var(--zk-bg);
-  border: 1px solid rgba(255,255,255,0.1) !important;
+
+.topbar label.sep { margin-left: 10px; }
+
+select {
+  background: var(--bg);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 7px;
-  color: var(--zk-text);
+  color: var(--text);
   font-size: 13px;
-  padding: 6px 28px 6px 10px;
   font-family: 'Lato', sans-serif;
+  padding: 7px 28px 7px 11px;
   outline: none;
   cursor: pointer;
   appearance: none;
@@ -141,91 +160,101 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' fill='%237D8590' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 9px center;
-  background-color: var(--zk-bg);
+  background-color: var(--bg);
   transition: border-color 0.2s;
-  height: auto !important;
-  line-height: normal !important;
 }
-#zakat-app select:focus { border-color: var(--zk-gold) !important; }
+select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.08); }
 
-#zakat-app .zk-refresh {
+.btn-refresh {
   background: rgba(201,168,76,0.1);
-  border: 1px solid rgba(201,168,76,0.25) !important;
-  color: var(--zk-gold);
+  border: 1px solid rgba(201,168,76,0.25);
+  color: var(--gold);
   border-radius: 7px;
-  padding: 7px 14px;
+  padding: 8px 15px;
   font-size: 12px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   font-family: 'Lato', sans-serif;
   font-weight: 700;
   letter-spacing: 0.5px;
   transition: background 0.2s, transform 0.15s;
-  line-height: 1;
+  white-space: nowrap;
 }
-#zakat-app .zk-refresh:hover { background: rgba(201,168,76,0.2); }
-#zakat-app .zk-refresh:active { transform: scale(0.97); }
+.btn-refresh:hover  { background: rgba(201,168,76,0.2); }
+.btn-refresh:active { transform: scale(0.97); }
+.btn-refresh:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* ── Price Grid ── */
-#zakat-app .zk-prices {
+/* ══════════════════════════════════════════════
+   PRICE CARDS
+══════════════════════════════════════════════ */
+.prices-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 24px;
-  animation: zk-fadeUp 0.8s 0.15s ease both;
+  gap: 18px;
+  margin-bottom: 26px;
+  animation: fadeUp 0.8s 0.15s ease both;
 }
-#zakat-app .zk-pcard {
-  background: var(--zk-card);
-  border: 1px solid var(--zk-border);
-  border-radius: 12px;
-  padding: 20px 22px;
+
+.pcard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 24px;
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s;
+  transition: transform 0.22s;
 }
-#zakat-app .zk-pcard:hover { transform: translateY(-2px); }
-#zakat-app .zk-pcard::before {
+.pcard:hover { transform: translateY(-3px); }
+
+.pcard::after {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
 }
-#zakat-app .zk-pcard.gold::before { background: linear-gradient(90deg, transparent, var(--zk-gold), transparent); }
-#zakat-app .zk-pcard.silver::before { background: linear-gradient(90deg, transparent, var(--zk-silver-light), transparent); }
+.pcard.gold::after   { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.pcard.silver::after { background: linear-gradient(90deg, transparent, var(--silver-light), transparent); }
 
-#zakat-app .zk-plabel {
-  font-size: 11px;
-  letter-spacing: 3px;
+.pcard-label {
+  font-size: 10px;
+  letter-spacing: 3.5px;
   text-transform: uppercase;
   font-weight: 700;
-  margin-bottom: 8px;
-  display: block;
-}
-#zakat-app .zk-pcard.gold .zk-plabel { color: var(--zk-gold); }
-#zakat-app .zk-pcard.silver .zk-plabel { color: var(--zk-silver-light); }
-
-#zakat-app .zk-pval {
-  font-family: 'Cinzel', serif;
-  font-size: 26px;
-  font-weight: 600;
-  line-height: 1;
-  display: block;
-  margin-bottom: 4px;
-}
-#zakat-app .zk-pcard.gold .zk-pval { color: var(--zk-gold-light); }
-#zakat-app .zk-pcard.silver .zk-pval { color: var(--zk-silver-light); }
-
-#zakat-app .zk-psub {
-  font-size: 11px;
-  color: var(--zk-muted);
   margin-bottom: 10px;
   display: block;
 }
+.pcard.gold   .pcard-label { color: var(--gold); }
+.pcard.silver .pcard-label { color: var(--silver-light); }
 
-#zakat-app .zk-prows { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-#zakat-app .zk-prow {
+.pcard-price {
+  font-family: 'Cinzel', serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+  display: block;
+}
+.pcard.gold   .pcard-price { color: var(--gold-light); }
+.pcard.silver .pcard-price { color: var(--silver-light); }
+
+.pcard-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 5px 0 12px;
+  display: block;
+}
+
+.pcard-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 12px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 10px;
+}
+
+.pcard-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -233,758 +262,816 @@
   padding: 4px 0;
   border-bottom: 1px solid rgba(255,255,255,0.04);
 }
-#zakat-app .zk-prow:last-child { border-bottom: none; }
-#zakat-app .zk-pr-lbl { color: var(--zk-muted); }
-#zakat-app .zk-pcard.gold .zk-pr-val { color: var(--zk-gold-light); font-weight: 700; }
-#zakat-app .zk-pcard.silver .zk-pr-val { color: var(--zk-silver-light); font-weight: 700; }
+.pcard-row:last-child { border-bottom: none; }
+.pcard-row .pr-lbl { color: var(--muted); }
+.pcard.gold   .pcard-row .pr-val { color: var(--gold-light); font-weight: 700; }
+.pcard.silver .pcard-row .pr-val { color: var(--silver-light); font-weight: 700; }
 
-#zakat-app .zk-badge {
+/* Live badges */
+.badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   font-size: 11px;
-  padding: 3px 8px;
+  padding: 3px 9px;
   border-radius: 20px;
+  font-weight: 600;
 }
-#zakat-app .zk-badge.live { background: rgba(35,134,54,0.2); color: #3FB950; border: 1px solid rgba(35,134,54,0.3); }
-#zakat-app .zk-badge.loading { background: rgba(201,168,76,0.1); color: var(--zk-gold); border: 1px solid rgba(201,168,76,0.2); }
-#zakat-app .zk-badge.error { background: rgba(218,54,51,0.15); color: #FF7B72; border: 1px solid rgba(218,54,51,0.3); }
-#zakat-app .zk-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: zk-pulse 1.5s infinite; display: inline-block; }
+.badge.live    { background: rgba(35,134,54,0.18);  color: var(--green);  border: 1px solid rgba(35,134,54,0.3); }
+.badge.loading { background: rgba(201,168,76,0.1);  color: var(--gold);   border: 1px solid rgba(201,168,76,0.2); }
+.badge.error   { background: rgba(255,123,114,0.1); color: var(--red);    border: 1px solid rgba(255,123,114,0.3); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: pulse 1.5s infinite; display: inline-block; flex-shrink: 0; }
 
-/* ── Nisab Banner ── */
-#zakat-app .zk-nisab-bar {
-  background: var(--zk-card);
-  border: 1px solid var(--zk-border);
+/* Shimmer loader */
+.shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.03) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  color: transparent !important;
+  min-width: 90px;
+  display: inline-block;
+}
+
+/* ══════════════════════════════════════════════
+   NISAB BANNER
+══════════════════════════════════════════════ */
+.nisab-bar {
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 16px 20px;
+  padding: 18px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
-  animation: zk-fadeUp 0.8s 0.25s ease both;
+  margin-bottom: 26px;
+  animation: fadeUp 0.8s 0.25s ease both;
 }
-#zakat-app .zk-nisab-info { flex: 1; min-width: 150px; }
-#zakat-app .zk-nisab-info h3 {
-  font-family: 'Cinzel', serif !important;
-  font-size: 12px !important;
-  letter-spacing: 2px;
-  color: var(--zk-gold);
-  margin-bottom: 3px !important;
-  margin-top: 0 !important;
-  border: none !important;
-  padding: 0 !important;
-}
-#zakat-app .zk-nisab-info p { font-size: 12px; color: var(--zk-muted); margin: 0 !important; }
-#zakat-app .zk-nisab-vals { display: flex; gap: 20px; flex-wrap: wrap; }
-#zakat-app .zk-nv { text-align: center; }
-#zakat-app .zk-nv-amt {
+
+.nisab-info { flex: 1; min-width: 150px; }
+.nisab-info h2 {
   font-family: 'Cinzel', serif;
-  font-size: 15px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  margin-bottom: 3px;
   font-weight: 600;
-  color: var(--zk-text);
+}
+.nisab-info p { font-size: 12px; color: var(--muted); }
+
+.nisab-vals { display: flex; gap: 24px; flex-wrap: wrap; }
+.nv { text-align: center; }
+.nv-amt {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
   display: block;
 }
-#zakat-app .zk-nv-lbl { font-size: 10px; color: var(--zk-muted); margin-top: 2px; display: block; }
+.nv-lbl { font-size: 10px; color: var(--muted); margin-top: 3px; display: block; }
 
-/* ── Sections Grid ── */
-#zakat-app .zk-grid-2 {
+/* ══════════════════════════════════════════════
+   ASSET SECTIONS
+══════════════════════════════════════════════ */
+.grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
   margin-bottom: 18px;
-  animation: zk-fadeUp 0.8s 0.35s ease both;
+  animation: fadeUp 0.8s 0.35s ease both;
 }
-#zakat-app .zk-card {
-  background: var(--zk-card);
-  border: 1px solid var(--zk-border);
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 14px;
   overflow: hidden;
-  margin-bottom: 0 !important;
 }
-#zakat-app .zk-card-head {
-  padding: 14px 20px;
+
+.card-head {
+  padding: 15px 20px;
   border-bottom: 1px solid rgba(255,255,255,0.05);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
 }
-#zakat-app .zk-icon {
-  width: 32px; height: 32px;
+
+.icon {
+  width: 34px; height: 34px;
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 15px;
+  font-size: 16px;
   flex-shrink: 0;
 }
-#zakat-app .zk-icon.gi { background: rgba(201,168,76,0.15); }
-#zakat-app .zk-icon.si { background: rgba(155,168,176,0.12); }
-#zakat-app .zk-icon.ci { background: rgba(35,134,54,0.12); }
+.icon.g { background: rgba(201,168,76,0.15); }
+.icon.s { background: rgba(155,168,176,0.12); }
+.icon.c { background: rgba(35,134,54,0.12); }
 
-#zakat-app .zk-card-title {
+.card-title {
   font-family: 'Cinzel', serif;
   font-size: 13px;
   font-weight: 600;
-  color: var(--zk-text);
+  color: var(--text);
   letter-spacing: 1px;
-  display: block;
-}
-#zakat-app .zk-card-body { padding: 16px 20px; }
-#zakat-app .zk-card-body-wide {
-  padding: 16px 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
 }
 
-#zakat-app .zk-field { margin-bottom: 12px; }
-#zakat-app .zk-field:last-child { margin-bottom: 0; }
-#zakat-app .zk-field > label {
+.card-body { padding: 18px 20px; }
+.card-body-wide {
+  padding: 18px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 14px;
+}
+
+/* Form fields */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+
+.field label {
   display: block;
   font-size: 11px;
-  color: var(--zk-muted);
-  margin-bottom: 5px !important;
-  letter-spacing: 0.4px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
 }
-#zakat-app .zk-input-wrap { position: relative; display: flex; align-items: center; }
-#zakat-app input[type="number"] {
+
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+input[type="number"] {
   width: 100%;
-  background: var(--zk-bg) !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-radius: 8px !important;
-  padding: 9px 40px 9px 12px !important;
-  color: var(--zk-text) !important;
-  font-size: 14px !important;
-  font-family: 'Lato', sans-serif !important;
-  outline: none !important;
-  transition: border-color 0.2s;
+  background: var(--bg);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 10px 42px 10px 13px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: 'Lato', sans-serif;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
   -moz-appearance: textfield;
-  box-shadow: none !important;
-  height: auto !important;
-  line-height: normal !important;
 }
-#zakat-app input[type="number"]::-webkit-inner-spin-button,
-#zakat-app input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
-#zakat-app input[type="number"]:focus { border-color: var(--zk-gold) !important; box-shadow: 0 0 0 3px rgba(201,168,76,0.08) !important; }
-#zakat-app .zk-unit {
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type="number"]:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.09);
+}
+
+.unit {
   position: absolute;
-  right: 11px;
+  right: 12px;
   font-size: 10px;
-  color: var(--zk-muted);
+  color: var(--muted);
   pointer-events: none;
   font-weight: 700;
   letter-spacing: 1px;
 }
-#zakat-app .zk-fval {
+
+.fval {
   font-size: 11px;
-  color: var(--zk-gold);
-  margin-top: 4px;
-  min-height: 14px;
+  color: var(--gold);
+  margin-top: 5px;
+  min-height: 15px;
   font-weight: 700;
   display: block;
 }
 
-/* ── Result ── */
-#zakat-app .zk-result {
-  background: var(--zk-card);
-  border: 1px solid rgba(201,168,76,0.3);
+/* ══════════════════════════════════════════════
+   RESULT SECTION
+══════════════════════════════════════════════ */
+.result-section {
+  background: var(--card);
+  border: 1px solid rgba(201,168,76,0.28);
   border-radius: 16px;
   overflow: hidden;
   position: relative;
-  animation: zk-fadeUp 0.8s 0.45s ease both;
+  animation: fadeUp 0.8s 0.45s ease both;
+  margin-bottom: 0;
 }
-#zakat-app .zk-result::before {
+.result-section::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--zk-gold-dark), var(--zk-gold-light), var(--zk-gold-dark));
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold-light), var(--gold-dark));
 }
-#zakat-app .zk-res-head {
-  padding: 20px 24px 16px;
+
+.res-head {
+  padding: 22px 28px 18px;
   border-bottom: 1px solid rgba(255,255,255,0.05);
   text-align: center;
 }
-#zakat-app .zk-res-head h3 {
-  font-family: 'Cinzel', serif !important;
-  font-size: 14px !important;
+.res-head h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
   letter-spacing: 3px;
-  color: var(--zk-gold);
+  color: var(--gold);
   text-transform: uppercase;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
 }
-#zakat-app .zk-res-body { padding: 24px; }
-#zakat-app .zk-total-row {
+
+.res-body { padding: 28px; }
+
+.total-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px;
-  background: var(--zk-card2);
+  padding: 15px 20px;
+  background: var(--card2);
   border-radius: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   border: 1px solid rgba(255,255,255,0.05);
 }
-#zakat-app .zk-total-lbl { font-size: 12px; color: var(--zk-muted); }
-#zakat-app .zk-total-amt {
+.total-lbl { font-size: 13px; color: var(--muted); }
+.total-amt {
   font-family: 'Cinzel', serif;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
-  color: var(--zk-text);
+  color: var(--text);
 }
-#zakat-app .zk-status {
+
+.status {
   text-align: center;
-  padding: 12px;
+  padding: 13px 16px;
   border-radius: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
 }
-#zakat-app .zk-status.ok { background: rgba(35,134,54,0.15); border: 1px solid rgba(35,134,54,0.3); color: #3FB950; }
-#zakat-app .zk-status.no { background: rgba(155,168,176,0.08); border: 1px solid rgba(155,168,176,0.15); color: var(--zk-muted); }
+.status.ok { background: rgba(35,134,54,0.15); border: 1px solid rgba(35,134,54,0.3); color: var(--green); }
+.status.no { background: rgba(155,168,176,0.07); border: 1px solid rgba(155,168,176,0.14); color: var(--muted); }
 
-#zakat-app .zk-zakat-box {
+.zakat-box {
   text-align: center;
-  padding: 28px 20px;
-  background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.04) 100%);
+  padding: 32px 20px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.09) 0%, rgba(201,168,76,0.04) 100%);
   border: 1px solid rgba(201,168,76,0.2);
   border-radius: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
-#zakat-app .zk-zakat-lbl {
+.zakat-lbl {
   font-size: 10px;
   letter-spacing: 4px;
   text-transform: uppercase;
-  color: var(--zk-gold);
-  margin-bottom: 10px;
+  color: var(--gold);
+  margin-bottom: 12px;
   font-weight: 700;
   display: block;
 }
-#zakat-app .zk-zakat-amt {
+.zakat-amt {
   font-family: 'Cinzel', serif;
-  font-size: clamp(30px, 5vw, 48px);
+  font-size: clamp(32px, 6vw, 52px);
   font-weight: 700;
-  background: linear-gradient(135deg, var(--zk-gold-light), var(--zk-gold));
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1;
   display: block;
 }
-#zakat-app .zk-zakat-rate { font-size: 11px; color: var(--zk-muted); margin-top: 8px; display: block; }
-
-#zakat-app .zk-breakdown {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 10px;
+.zakat-rate {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+  display: block;
 }
-#zakat-app .zk-bi {
-  background: var(--zk-card2);
+
+.breakdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.bi {
+  background: var(--card2);
   border: 1px solid rgba(255,255,255,0.05);
   border-radius: 9px;
-  padding: 12px 14px;
+  padding: 13px 15px;
 }
-#zakat-app .zk-bi-lbl { font-size: 10px; color: var(--zk-muted); margin-bottom: 5px; display: block; }
-#zakat-app .zk-bi-val { font-family: 'Cinzel', serif; font-size: 14px; color: var(--zk-text); font-weight: 600; display: block; }
+.bi-lbl { font-size: 10px; color: var(--muted); margin-bottom: 5px; display: block; }
+.bi-val { font-family: 'Cinzel', serif; font-size: 14px; color: var(--text); font-weight: 600; display: block; }
 
-#zakat-app .zk-hawl {
-  margin-top: 18px;
-  padding: 12px 16px;
+.hawl-note {
+  padding: 14px 18px;
   background: rgba(121,192,255,0.06);
   border: 1px solid rgba(121,192,255,0.12);
   border-radius: 9px;
-  font-size: 12px;
-  color: var(--zk-muted);
-  line-height: 1.6;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.65;
 }
-#zakat-app .zk-hawl strong { color: #79C0FF; }
+.hawl-note strong { color: var(--blue); }
 
-/* ── Shimmer ── */
-#zakat-app .zk-shimmer {
-  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
-  background-size: 200% 100%;
-  animation: zk-shimmer 1.5s infinite;
-  border-radius: 4px;
-  color: transparent !important;
-  min-width: 80px;
-  display: inline-block;
-}
-
-/* ── Footer ── */
-#zakat-app .zk-footer {
+/* ══════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
+footer {
   text-align: center;
-  margin-top: 48px;
-  padding-top: 24px;
+  margin-top: 56px;
+  padding-top: 28px;
   border-top: 1px solid rgba(201,168,76,0.1);
+  animation: fadeUp 0.8s 0.5s ease both;
 }
-#zakat-app .zk-footer-brand {
+
+.footer-logo {
   font-family: 'Cinzel', serif;
-  font-size: 13px;
-  color: var(--zk-muted);
+  font-size: 14px;
+  color: var(--muted);
   letter-spacing: 1px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   display: block;
 }
-#zakat-app .zk-footer-brand span { color: var(--zk-gold); font-weight: 600; }
-#zakat-app .zk-footer a {
-  font-size: 12px;
-  color: var(--zk-gold) !important;
-  text-decoration: none !important;
+.footer-logo span { color: var(--gold); font-weight: 600; }
+
+footer a {
+  font-size: 13px;
+  color: var(--gold);
+  text-decoration: none;
   border-bottom: 1px solid rgba(201,168,76,0.3);
   padding-bottom: 1px;
-  transition: color 0.2s;
+  transition: color 0.2s, border-color 0.2s;
+  letter-spacing: 0.3px;
 }
-#zakat-app .zk-footer a:hover { color: var(--zk-gold-light) !important; }
-#zakat-app .zk-footer-copy {
-  margin-top: 8px;
+footer a:hover { color: var(--gold-light); border-color: var(--gold-light); }
+
+.footer-copy {
+  margin-top: 10px;
   font-size: 11px;
-  color: var(--zk-muted);
+  color: var(--muted);
   opacity: 0.45;
   display: block;
 }
 
-/* ── Responsive ── */
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
 @media (max-width: 600px) {
-  #zakat-app .zk-prices,
-  #zakat-app .zk-grid-2 { grid-template-columns: 1fr; }
-  #zakat-app .zk-nisab-bar { flex-direction: column; align-items: flex-start; }
-  #zakat-app .zk-topbar { flex-direction: column; align-items: flex-start; }
+  .prices-grid,
+  .grid-2           { grid-template-columns: 1fr; }
+  .nisab-bar        { flex-direction: column; align-items: flex-start; }
+  .topbar           { flex-direction: column; align-items: flex-start; }
+  .topbar-left      { flex-direction: column; align-items: flex-start; }
+  .res-body         { padding: 18px; }
+  .zakat-box        { padding: 22px 16px; }
 }
 
-/* ── Animations ── */
-@keyframes zk-fadeDown {
-  from { opacity: 0; transform: translateY(-18px); }
-  to { opacity: 1; transform: translateY(0); }
+/* ══════════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════════ */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes zk-fadeUp {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes zk-pulse {
+@keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.65); }
+  50%       { opacity: 0.35; transform: scale(0.65); }
 }
-@keyframes zk-shimmer {
+@keyframes shimmer {
   from { background-position: 200% 0; }
-  to { background-position: -200% 0; }
+  to   { background-position: -200% 0; }
 }
-@keyframes zk-spin {
+@keyframes spin {
   from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  to   { transform: rotate(360deg); }
 }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); border-radius: 3px; }
 </style>
+</head>
+<body>
 
-<!-- ════════════════════════════════════════════════
-     HTML MARKUP
-════════════════════════════════════════════════ -->
-<div id="zakat-app">
-  <div class="zk-wrap">
+<div class="wrap">
 
-    <!-- Header -->
-    <div class="zk-header">
-      <span class="zk-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
-      <h2>Zakat Calculator</h2>
-      <p>Calculate your annual Zakat obligation with live market prices</p>
-      <div class="zk-divider"></div>
+  <!-- ── HEADER ─────────────────────────────── -->
+  <header class="site-header">
+    <span class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
+    <h1>Zakat Calculator</h1>
+    <p class="subtitle">Calculate your annual Zakat obligation with live gold &amp; silver prices</p>
+    <div class="divider"></div>
+  </header>
+
+  <!-- ── TOP BAR ─────────────────────────────── -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <label for="currency">Currency</label>
+      <select id="currency" onchange="handleCurrency()">
+        <option value="USD">🇺🇸 USD — US Dollar</option>
+        <option value="PKR" selected>🇵🇰 PKR — Pakistani Rupee</option>
+        <option value="GBP">🇬🇧 GBP — British Pound</option>
+        <option value="EUR">🇪🇺 EUR — Euro</option>
+        <option value="SAR">🇸🇦 SAR — Saudi Riyal</option>
+        <option value="AED">🇦🇪 AED — UAE Dirham</option>
+        <option value="BDT">🇧🇩 BDT — Bangladeshi Taka</option>
+        <option value="INR">🇮🇳 INR — Indian Rupee</option>
+      </select>
+      <label for="nisab-std" class="sep">Nisab by</label>
+      <select id="nisab-std" onchange="calc()">
+        <option value="gold">Gold (85g)</option>
+        <option value="silver" selected>Silver (595g)</option>
+      </select>
     </div>
+    <button class="btn-refresh" id="refreshBtn" onclick="fetchPrices()">
+      <svg id="refreshIcon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
+        <path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+      </svg>
+      Refresh Prices
+    </button>
+  </div>
 
-    <!-- Top Bar -->
-    <div class="zk-topbar">
-      <div class="zk-topbar-left">
-        <label for="zk-currency">Currency</label>
-        <select id="zk-currency" onchange="zkHandleCurrency()">
-          <option value="USD">🇺🇸 USD — US Dollar</option>
-          <option value="PKR" selected>🇵🇰 PKR — Pakistani Rupee</option>
-          <option value="GBP">🇬🇧 GBP — British Pound</option>
-          <option value="EUR">🇪🇺 EUR — Euro</option>
-          <option value="SAR">🇸🇦 SAR — Saudi Riyal</option>
-          <option value="AED">🇦🇪 AED — UAE Dirham</option>
-          <option value="BDT">🇧🇩 BDT — Bangladeshi Taka</option>
-          <option value="INR">🇮🇳 INR — Indian Rupee</option>
-        </select>
-        <label for="zk-nisab-std" style="margin-left:10px;">Nisab by</label>
-        <select id="zk-nisab-std" onchange="zkCalc()">
-          <option value="gold">Gold (85g)</option>
-          <option value="silver" selected>Silver (595g)</option>
-        </select>
-      </div>
-      <button class="zk-refresh" id="zk-refreshBtn" onclick="zkFetch()">
-        <svg id="zk-refreshIcon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
-          <path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
-          <path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
-        </svg>
-        Refresh Prices
-      </button>
+  <!-- ── PRICE CARDS ─────────────────────────── -->
+  <div class="prices-grid">
+    <div class="pcard gold">
+      <span class="pcard-label">🥇 Gold Price</span>
+      <span class="pcard-price" id="goldPrice"><span class="shimmer">Loading...</span></span>
+      <span class="pcard-sub">per gram</span>
+      <div class="pcard-rows" id="goldRows"></div>
+      <div id="goldBadge"><span class="badge loading"><span class="dot"></span> Fetching...</span></div>
     </div>
-
-    <!-- Price Cards -->
-    <div class="zk-prices">
-      <div class="zk-pcard gold">
-        <span class="zk-plabel">🥇 Gold Price</span>
-        <span class="zk-pval" id="zk-goldPrice"><span class="zk-shimmer">Loading...</span></span>
-        <span class="zk-psub">per gram</span>
-        <div class="zk-prows" id="zk-goldRows"></div>
-        <div id="zk-goldBadge"><span class="zk-badge loading"><span class="zk-dot"></span> Fetching...</span></div>
-      </div>
-      <div class="zk-pcard silver">
-        <span class="zk-plabel">🥈 Silver Price</span>
-        <span class="zk-pval" id="zk-silverPrice"><span class="zk-shimmer">Loading...</span></span>
-        <span class="zk-psub">per gram</span>
-        <div class="zk-prows" id="zk-silverRows"></div>
-        <div id="zk-silverBadge"><span class="zk-badge loading"><span class="zk-dot"></span> Fetching...</span></div>
-      </div>
+    <div class="pcard silver">
+      <span class="pcard-label">🥈 Silver Price</span>
+      <span class="pcard-price" id="silverPrice"><span class="shimmer">Loading...</span></span>
+      <span class="pcard-sub">per gram</span>
+      <div class="pcard-rows" id="silverRows"></div>
+      <div id="silverBadge"><span class="badge loading"><span class="dot"></span> Fetching...</span></div>
     </div>
+  </div>
 
-    <!-- Nisab Banner -->
-    <div class="zk-nisab-bar">
-      <div class="zk-nisab-info">
-        <h3>Nisab Threshold</h3>
-        <p>Minimum wealth required for Zakat to be obligatory</p>
+  <!-- ── NISAB BANNER ───────────────────────── -->
+  <div class="nisab-bar">
+    <div class="nisab-info">
+      <h2>Nisab Threshold</h2>
+      <p>Minimum wealth for Zakat to be obligatory</p>
+    </div>
+    <div class="nisab-vals">
+      <div class="nv">
+        <span class="nv-amt" id="nisabGold">—</span>
+        <span class="nv-lbl">Gold Nisab (85g)</span>
       </div>
-      <div class="zk-nisab-vals">
-        <div class="zk-nv">
-          <span class="zk-nv-amt" id="zk-nisabGold">—</span>
-          <span class="zk-nv-lbl">Gold Nisab (85g)</span>
-        </div>
-        <div class="zk-nv">
-          <span class="zk-nv-amt" id="zk-nisabSilver">—</span>
-          <span class="zk-nv-lbl">Silver Nisab (595g)</span>
-        </div>
+      <div class="nv">
+        <span class="nv-amt" id="nisabSilver">—</span>
+        <span class="nv-lbl">Silver Nisab (595g)</span>
       </div>
     </div>
+  </div>
 
-    <!-- Metals -->
-    <div class="zk-grid-2">
-      <div class="zk-card">
-        <div class="zk-card-head">
-          <div class="zk-icon gi">🥇</div>
-          <span class="zk-card-title">Gold Holdings</span>
-        </div>
-        <div class="zk-card-body">
-          <div class="zk-field">
-            <label>Gold (grams)</label>
-            <div class="zk-input-wrap">
-              <input type="number" id="zk-goldGrams" placeholder="0" min="0" step="0.01" oninput="zkCalc()">
-              <span class="zk-unit">g</span>
-            </div>
-            <span class="zk-fval" id="zk-goldGVal"></span>
-          </div>
-          <div class="zk-field">
-            <label>Gold (tola)</label>
-            <div class="zk-input-wrap">
-              <input type="number" id="zk-goldTola" placeholder="0" min="0" step="0.01" oninput="zkTola('gold')">
-              <span class="zk-unit">tola</span>
-            </div>
-          </div>
-          <div class="zk-field">
-            <label>Gold (troy oz)</label>
-            <div class="zk-input-wrap">
-              <input type="number" id="zk-goldOz" placeholder="0" min="0" step="0.001" oninput="zkOz('gold')">
-              <span class="zk-unit">oz</span>
-            </div>
-          </div>
-        </div>
+  <!-- ── METALS ─────────────────────────────── -->
+  <div class="grid-2">
+    <!-- Gold -->
+    <div class="card">
+      <div class="card-head">
+        <div class="icon g">🥇</div>
+        <span class="card-title">Gold Holdings</span>
       </div>
-      <div class="zk-card">
-        <div class="zk-card-head">
-          <div class="zk-icon si">🥈</div>
-          <span class="zk-card-title">Silver Holdings</span>
+      <div class="card-body">
+        <div class="field">
+          <label>Gold (grams)</label>
+          <div class="input-wrap">
+            <input type="number" id="goldGrams" placeholder="0" min="0" step="0.01" oninput="calc()">
+            <span class="unit">g</span>
+          </div>
+          <span class="fval" id="goldGVal"></span>
         </div>
-        <div class="zk-card-body">
-          <div class="zk-field">
-            <label>Silver (grams)</label>
-            <div class="zk-input-wrap">
-              <input type="number" id="zk-silverGrams" placeholder="0" min="0" step="0.01" oninput="zkCalc()">
-              <span class="zk-unit">g</span>
-            </div>
-            <span class="zk-fval" id="zk-silverGVal"></span>
+        <div class="field">
+          <label>Gold (tola)</label>
+          <div class="input-wrap">
+            <input type="number" id="goldTola" placeholder="0" min="0" step="0.01" oninput="tolaToGram('gold')">
+            <span class="unit">tola</span>
           </div>
-          <div class="zk-field">
-            <label>Silver (tola)</label>
-            <div class="zk-input-wrap">
-              <input type="number" id="zk-silverTola" placeholder="0" min="0" step="0.01" oninput="zkTola('silver')">
-              <span class="zk-unit">tola</span>
-            </div>
-          </div>
-          <div class="zk-field">
-            <label>Silver (troy oz)</label>
-            <div class="zk-input-wrap">
-              <input type="number" id="zk-silverOz" placeholder="0" min="0" step="0.001" oninput="zkOz('silver')">
-              <span class="zk-unit">oz</span>
-            </div>
+        </div>
+        <div class="field">
+          <label>Gold (troy oz)</label>
+          <div class="input-wrap">
+            <input type="number" id="goldOz" placeholder="0" min="0" step="0.001" oninput="ozToGram('gold')">
+            <span class="unit">oz</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Cash & Assets -->
-    <div class="zk-card" style="margin-bottom:18px; animation: zk-fadeUp 0.8s 0.4s ease both;">
-      <div class="zk-card-head">
-        <div class="zk-icon ci">💵</div>
-        <span class="zk-card-title">Cash, Savings &amp; Other Assets</span>
+    <!-- Silver -->
+    <div class="card">
+      <div class="card-head">
+        <div class="icon s">🥈</div>
+        <span class="card-title">Silver Holdings</span>
       </div>
-      <div class="zk-card-body-wide">
-        <div class="zk-field">
-          <label>Cash at home</label>
-          <div class="zk-input-wrap">
-            <input type="number" id="zk-cashHome" placeholder="0" min="0" oninput="zkCalc()">
-            <span class="zk-unit" id="zk-cu1">PKR</span>
+      <div class="card-body">
+        <div class="field">
+          <label>Silver (grams)</label>
+          <div class="input-wrap">
+            <input type="number" id="silverGrams" placeholder="0" min="0" step="0.01" oninput="calc()">
+            <span class="unit">g</span>
+          </div>
+          <span class="fval" id="silverGVal"></span>
+        </div>
+        <div class="field">
+          <label>Silver (tola)</label>
+          <div class="input-wrap">
+            <input type="number" id="silverTola" placeholder="0" min="0" step="0.01" oninput="tolaToGram('silver')">
+            <span class="unit">tola</span>
           </div>
         </div>
-        <div class="zk-field">
-          <label>Bank balance</label>
-          <div class="zk-input-wrap">
-            <input type="number" id="zk-bank" placeholder="0" min="0" oninput="zkCalc()">
-            <span class="zk-unit" id="zk-cu2">PKR</span>
-          </div>
-        </div>
-        <div class="zk-field">
-          <label>Business / Trade goods</label>
-          <div class="zk-input-wrap">
-            <input type="number" id="zk-biz" placeholder="0" min="0" oninput="zkCalc()">
-            <span class="zk-unit" id="zk-cu3">PKR</span>
-          </div>
-        </div>
-        <div class="zk-field">
-          <label>Money owed to you</label>
-          <div class="zk-input-wrap">
-            <input type="number" id="zk-recv" placeholder="0" min="0" oninput="zkCalc()">
-            <span class="zk-unit" id="zk-cu4">PKR</span>
-          </div>
-        </div>
-        <div class="zk-field">
-          <label>Investments / Stocks</label>
-          <div class="zk-input-wrap">
-            <input type="number" id="zk-invest" placeholder="0" min="0" oninput="zkCalc()">
-            <span class="zk-unit" id="zk-cu5">PKR</span>
-          </div>
-        </div>
-        <div class="zk-field">
-          <label>Debts owed by you (−)</label>
-          <div class="zk-input-wrap">
-            <input type="number" id="zk-debts" placeholder="0" min="0" oninput="zkCalc()">
-            <span class="zk-unit" id="zk-cu6">PKR</span>
+        <div class="field">
+          <label>Silver (troy oz)</label>
+          <div class="input-wrap">
+            <input type="number" id="silverOz" placeholder="0" min="0" step="0.001" oninput="ozToGram('silver')">
+            <span class="unit">oz</span>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Result -->
-    <div class="zk-result">
-      <div class="zk-res-head">
-        <h3>✦ Zakat Calculation Result ✦</h3>
+  <!-- ── CASH & ASSETS ──────────────────────── -->
+  <div class="card" style="margin-bottom:18px; animation: fadeUp 0.8s 0.4s ease both;">
+    <div class="card-head">
+      <div class="icon c">💵</div>
+      <span class="card-title">Cash, Savings &amp; Other Assets</span>
+    </div>
+    <div class="card-body-wide">
+      <div class="field">
+        <label>Cash at home</label>
+        <div class="input-wrap">
+          <input type="number" id="cashHome" placeholder="0" min="0" oninput="calc()">
+          <span class="unit" id="cu1">PKR</span>
+        </div>
       </div>
-      <div class="zk-res-body">
-        <div class="zk-total-row">
-          <span class="zk-total-lbl">Total Zakatable Wealth</span>
-          <span class="zk-total-amt" id="zk-totalWealth">—</span>
+      <div class="field">
+        <label>Bank balance</label>
+        <div class="input-wrap">
+          <input type="number" id="bankBal" placeholder="0" min="0" oninput="calc()">
+          <span class="unit" id="cu2">PKR</span>
         </div>
-        <div class="zk-status no" id="zk-status">Enter your assets above to calculate Zakat</div>
-        <div class="zk-zakat-box">
-          <span class="zk-zakat-lbl">Zakat Due (2.5%)</span>
-          <span class="zk-zakat-amt" id="zk-zakatDue">—</span>
-          <span class="zk-zakat-rate">Calculated at 1/40th of total zakatable wealth</span>
+      </div>
+      <div class="field">
+        <label>Business / Trade goods</label>
+        <div class="input-wrap">
+          <input type="number" id="biz" placeholder="0" min="0" oninput="calc()">
+          <span class="unit" id="cu3">PKR</span>
         </div>
-        <div class="zk-breakdown">
-          <div class="zk-bi"><span class="zk-bi-lbl">Gold Value</span><span class="zk-bi-val" id="zk-bGold">—</span></div>
-          <div class="zk-bi"><span class="zk-bi-lbl">Silver Value</span><span class="zk-bi-val" id="zk-bSilver">—</span></div>
-          <div class="zk-bi"><span class="zk-bi-lbl">Cash &amp; Savings</span><span class="zk-bi-val" id="zk-bCash">—</span></div>
-          <div class="zk-bi"><span class="zk-bi-lbl">Other Assets</span><span class="zk-bi-val" id="zk-bOther">—</span></div>
-          <div class="zk-bi"><span class="zk-bi-lbl">Debts Deducted</span><span class="zk-bi-val" id="zk-bDebts">—</span></div>
-          <div class="zk-bi"><span class="zk-bi-lbl">Nisab Used</span><span class="zk-bi-val" id="zk-bNisab">—</span></div>
+      </div>
+      <div class="field">
+        <label>Money owed to you</label>
+        <div class="input-wrap">
+          <input type="number" id="recv" placeholder="0" min="0" oninput="calc()">
+          <span class="unit" id="cu4">PKR</span>
         </div>
-        <div class="zk-hawl">
-          <strong>📅 Hawl Reminder:</strong> Zakat becomes obligatory only when your wealth has remained at or above the Nisab for one complete lunar year (Hawl). Please ensure you have held this wealth for the required period before paying.
+      </div>
+      <div class="field">
+        <label>Investments / Stocks</label>
+        <div class="input-wrap">
+          <input type="number" id="invest" placeholder="0" min="0" oninput="calc()">
+          <span class="unit" id="cu5">PKR</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Debts owed by you (−)</label>
+        <div class="input-wrap">
+          <input type="number" id="debts" placeholder="0" min="0" oninput="calc()">
+          <span class="unit" id="cu6">PKR</span>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Footer -->
-    <div class="zk-footer">
-      <span class="zk-footer-brand">Developed by <span>Alpha Solutions Services LLC</span></span>
-      <a href="https://alphasolutions.online" target="_blank" rel="noopener noreferrer">🌐 alphasolutions.online</a>
-      <span class="zk-footer-copy">© 2025 Alpha Solutions Services LLC · All rights reserved</span>
+  <!-- ── RESULT ─────────────────────────────── -->
+  <div class="result-section">
+    <div class="res-head">
+      <h2>✦ Zakat Calculation Result ✦</h2>
     </div>
+    <div class="res-body">
+      <div class="total-row">
+        <span class="total-lbl">Total Zakatable Wealth</span>
+        <span class="total-amt" id="totalWealth">—</span>
+      </div>
+      <div class="status no" id="status">Enter your assets above to calculate Zakat</div>
+      <div class="zakat-box">
+        <span class="zakat-lbl">Zakat Due (2.5%)</span>
+        <span class="zakat-amt" id="zakatDue">—</span>
+        <span class="zakat-rate">Calculated at 1/40th of total zakatable wealth</span>
+      </div>
+      <div class="breakdown">
+        <div class="bi"><span class="bi-lbl">Gold Value</span><span class="bi-val" id="bGold">—</span></div>
+        <div class="bi"><span class="bi-lbl">Silver Value</span><span class="bi-val" id="bSilver">—</span></div>
+        <div class="bi"><span class="bi-lbl">Cash &amp; Savings</span><span class="bi-val" id="bCash">—</span></div>
+        <div class="bi"><span class="bi-lbl">Other Assets</span><span class="bi-val" id="bOther">—</span></div>
+        <div class="bi"><span class="bi-lbl">Debts Deducted</span><span class="bi-val" id="bDebts">—</span></div>
+        <div class="bi"><span class="bi-lbl">Nisab Used</span><span class="bi-val" id="bNisab">—</span></div>
+      </div>
+      <div class="hawl-note">
+        <strong>📅 Hawl Reminder:</strong> Zakat becomes obligatory only when your wealth has remained at or above the Nisab for one complete lunar year (Hawl). Please ensure you have held this wealth for the required period before paying.
+      </div>
+    </div>
+  </div>
 
-  </div><!-- /zk-wrap -->
-</div><!-- /zakat-app -->
+  <!-- ── FOOTER ─────────────────────────────── -->
+  <footer>
+    <span class="footer-logo">Developed by <span>Alpha Solutions Services LLC</span></span>
+    <a href="https://alphasolutions.online" target="_blank" rel="noopener noreferrer">🌐 alphasolutions.online</a>
+    <span class="footer-copy">© 2025 Alpha Solutions Services LLC · All rights reserved</span>
+  </footer>
 
+</div><!-- /wrap -->
+
+<!-- ══════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════ -->
 <script>
-(function() {
-  // ── Namespaced to avoid conflicts with other WP scripts ──
-  const ZK = {
-    TROY_OZ_TO_GRAM: 31.1035,
-    TOLA_TO_GRAM: 11.6638,
-    GOLD_NISAB_G: 85,
-    SILVER_NISAB_G: 595,
-    goldUSD: 0,
-    silverUSD: 0,
-    ready: false,
-    rates: { USD:1, PKR:279.0, GBP:0.79, EUR:0.92, SAR:3.75, AED:3.67, BDT:110, INR:83.2 },
-    symbols: { USD:'$', PKR:'₨', GBP:'£', EUR:'€', SAR:'SR ', AED:'AED ', BDT:'৳', INR:'₹' }
-  };
+'use strict';
 
-  function $ (id) { return document.getElementById(id); }
-  function cur() { return $('zk-currency').value; }
-  function sym() { return ZK.symbols[cur()] || cur()+' '; }
-  function rate() { return ZK.rates[cur()] || 1; }
+// ── Constants ────────────────────────────────────────────────────────────────
+const TROY   = 31.1035;   // grams per troy oz
+const TOLA   = 11.6638;   // grams per tola
+const G_NIS  = 85;        // gold nisab grams
+const S_NIS  = 595;       // silver nisab grams
 
-  function fmt(n) {
-    if (!n && n !== 0) return '—';
-    const s = sym();
-    if (n >= 1e7) return s + (n/1e7).toFixed(2) + ' Cr';
-    if (n >= 1e5) return s + (n/1e5).toFixed(2) + ' L';
-    return s + n.toLocaleString('en-US', {maximumFractionDigits:0});
-  }
+// ── State ─────────────────────────────────────────────────────────────────────
+let goldUSD   = 0;
+let silverUSD = 0;
+let ready     = false;
+let rates     = { USD:1, PKR:279.0, GBP:0.79, EUR:0.92, SAR:3.75, AED:3.67, BDT:110, INR:83.2 };
 
-  function badge(metal, type, txt) {
-    $('zk-'+metal+'Badge').innerHTML =
-      `<span class="zk-badge ${type}"><span class="zk-dot"></span> ${txt}</span>`;
-  }
+const SYMS    = { USD:'$', PKR:'₨', GBP:'£', EUR:'€', SAR:'SR ', AED:'AED ', BDT:'৳', INR:'₹' };
 
-  function updateDisplay() {
-    const s = sym(), r = rate(), c = cur();
-    const gG = ZK.goldUSD * r;
-    const sG = ZK.silverUSD * r;
-    const gT = gG * ZK.TOLA_TO_GRAM;
-    const sT = sG * ZK.TOLA_TO_GRAM;
-    const gO = ZK.goldUSD * r * ZK.TROY_OZ_TO_GRAM;
-    const sO = ZK.silverUSD * r * ZK.TROY_OZ_TO_GRAM;
+// ── Helpers ──────────────────────────────────────────────────────────────────
+const $   = id => document.getElementById(id);
+const cur = ()  => $('currency').value;
+const sym = ()  => SYMS[cur()] || cur()+' ';
+const rt  = ()  => rates[cur()] || 1;
 
-    $('zk-goldPrice').textContent   = s + gG.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-    $('zk-silverPrice').textContent = s + sG.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+function fmt(n) {
+  if (!n && n !== 0) return '—';
+  const s = sym();
+  if (n >= 1e7) return s + (n/1e7).toFixed(2) + ' Cr';
+  if (n >= 1e5) return s + (n/1e5).toFixed(2) + ' L';
+  return s + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+}
 
-    $('zk-goldRows').innerHTML = `
-      <div class="zk-prow"><span class="zk-pr-lbl">Per Tola (11.66g)</span><span class="zk-pr-val">${s}${gT.toLocaleString('en-US',{maximumFractionDigits:0})}</span></div>
-      <div class="zk-prow"><span class="zk-pr-lbl">Per Troy Oz (31.1g)</span><span class="zk-pr-val">${s}${gO.toLocaleString('en-US',{maximumFractionDigits:0})}</span></div>
-      <div class="zk-prow"><span class="zk-pr-lbl">Per Gram (USD)</span><span class="zk-pr-val">$${ZK.goldUSD.toFixed(2)}</span></div>`;
+function setBadge(metal, type, txt) {
+  $(metal + 'Badge').innerHTML =
+    `<span class="badge ${type}"><span class="dot"></span> ${txt}</span>`;
+}
 
-    $('zk-silverRows').innerHTML = `
-      <div class="zk-prow"><span class="zk-pr-lbl">Per Tola (11.66g)</span><span class="zk-pr-val">${s}${sT.toLocaleString('en-US',{maximumFractionDigits:2})}</span></div>
-      <div class="zk-prow"><span class="zk-pr-lbl">Per Troy Oz (31.1g)</span><span class="zk-pr-val">${s}${sO.toLocaleString('en-US',{maximumFractionDigits:2})}</span></div>
-      <div class="zk-prow"><span class="zk-pr-lbl">Per Gram (USD)</span><span class="zk-pr-val">$${ZK.silverUSD.toFixed(4)}</span></div>`;
+// ── Price Display ─────────────────────────────────────────────────────────────
+function updateDisplay() {
+  const s = sym(), r = rt(), c = cur();
+  const gG = goldUSD   * r;
+  const sG = silverUSD * r;
+  const gT = gG * TOLA;
+  const sT = sG * TOLA;
+  const gO = goldUSD   * r * TROY;
+  const sO = silverUSD * r * TROY;
 
-    const ng = gG * ZK.GOLD_NISAB_G;
-    const ns = sG * ZK.SILVER_NISAB_G;
-    $('zk-nisabGold').textContent   = fmt(ng);
-    $('zk-nisabSilver').textContent = fmt(ns);
+  $('goldPrice').textContent   = s + gG.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  $('silverPrice').textContent = s + sG.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
 
-    ['zk-cu1','zk-cu2','zk-cu3','zk-cu4','zk-cu5','zk-cu6'].forEach(id => { $(id).textContent = c; });
-  }
+  $('goldRows').innerHTML = `
+    <div class="pcard-row"><span class="pr-lbl">Per Tola (11.66g)</span><span class="pr-val">${s}${gT.toLocaleString('en-US',{maximumFractionDigits:0})}</span></div>
+    <div class="pcard-row"><span class="pr-lbl">Per Troy Oz (31.1g)</span><span class="pr-val">${s}${gO.toLocaleString('en-US',{maximumFractionDigits:0})}</span></div>
+    <div class="pcard-row"><span class="pr-lbl">Per Gram (USD)</span><span class="pr-val">$${goldUSD.toFixed(2)}</span></div>`;
 
-  async function zkFetch() {
-    const btn = $('zk-refreshBtn'), icon = $('zk-refreshIcon');
-    btn.disabled = true;
-    icon.style.animation = 'zk-spin 0.7s linear infinite';
-    badge('gold','loading','Fetching...');
-    badge('silver','loading','Fetching...');
+  $('silverRows').innerHTML = `
+    <div class="pcard-row"><span class="pr-lbl">Per Tola (11.66g)</span><span class="pr-val">${s}${sT.toLocaleString('en-US',{maximumFractionDigits:2})}</span></div>
+    <div class="pcard-row"><span class="pr-lbl">Per Troy Oz (31.1g)</span><span class="pr-val">${s}${sO.toLocaleString('en-US',{maximumFractionDigits:2})}</span></div>
+    <div class="pcard-row"><span class="pr-lbl">Per Gram (USD)</span><span class="pr-val">$${silverUSD.toFixed(4)}</span></div>`;
 
-    let goldUSD = null, silverUSD = null;
+  $('nisabGold').textContent   = fmt(gG * G_NIS);
+  $('nisabSilver').textContent = fmt(sG * S_NIS);
 
-    try {
-      const res = await fetch('https://api.metalpriceapi.com/v1/latest?api_key=demo&base=USD&currencies=XAU,XAG',
-        { signal: AbortSignal.timeout(6000) }).catch(()=>null);
-      if (res && res.ok) {
-        const d = await res.json();
-        if (d.rates) {
-          if (d.rates.XAU) goldUSD   = (1/d.rates.XAU) * ZK.TROY_OZ_TO_GRAM;
-          if (d.rates.XAG) silverUSD = (1/d.rates.XAG) * ZK.TROY_OZ_TO_GRAM;
-        }
+  ['cu1','cu2','cu3','cu4','cu5','cu6'].forEach(id => $(id).textContent = c);
+}
+
+// ── Fetch Prices ─────────────────────────────────────────────────────────────
+async function fetchPrices() {
+  const btn  = $('refreshBtn');
+  const icon = $('refreshIcon');
+  btn.disabled = true;
+  icon.style.animation = 'spin 0.7s linear infinite';
+  setBadge('gold',   'loading', 'Fetching...');
+  setBadge('silver', 'loading', 'Fetching...');
+
+  let gUSD = null, sUSD = null;
+
+  // ① Try metalpriceapi.com (free demo key)
+  try {
+    const res = await fetch(
+      'https://api.metalpriceapi.com/v1/latest?api_key=demo&base=USD&currencies=XAU,XAG',
+      { signal: AbortSignal.timeout(7000) }
+    ).catch(() => null);
+    if (res && res.ok) {
+      const d = await res.json();
+      if (d.rates) {
+        if (d.rates.XAU) gUSD = (1 / d.rates.XAU) * TROY;
+        if (d.rates.XAG) sUSD = (1 / d.rates.XAG) * TROY;
       }
-    } catch(e) {}
-
-    // Fallback prices (PKR-calibrated)
-    ZK.goldUSD   = goldUSD   || 162.0;
-    ZK.silverUSD = silverUSD || 2.66;
-
-    // Live FX rates
-    try {
-      const fx = await fetch('https://api.frankfurter.app/latest?from=USD&to=PKR,GBP,EUR,SAR,AED,BDT,INR',
-        { signal: AbortSignal.timeout(6000) });
-      if (fx.ok) {
-        const fd = await fx.json();
-        if (fd.rates) ZK.rates = { USD:1, ...fd.rates };
-      }
-    } catch(e) {}
-
-    ZK.ready = true;
-    updateDisplay();
-    badge('gold', goldUSD ? 'live' : 'error', goldUSD ? 'Live' : 'Approx.');
-    badge('silver', silverUSD ? 'live' : 'error', silverUSD ? 'Live' : 'Approx.');
-    zkCalc();
-
-    btn.disabled = false;
-    icon.style.animation = '';
-  }
-
-  function zkCalc() {
-    if (!ZK.ready) return;
-    const r = rate();
-    const gG = ZK.goldUSD * r, sG = ZK.silverUSD * r;
-
-    const goldG  = parseFloat($('zk-goldGrams').value)  || 0;
-    const silvG  = parseFloat($('zk-silverGrams').value) || 0;
-    const cash   = (parseFloat($('zk-cashHome').value)||0) + (parseFloat($('zk-bank').value)||0);
-    const other  = (parseFloat($('zk-biz').value)||0) + (parseFloat($('zk-recv').value)||0) + (parseFloat($('zk-invest').value)||0);
-    const debts  = parseFloat($('zk-debts').value) || 0;
-
-    const goldVal   = goldG * gG;
-    const silverVal = silvG * sG;
-    const total     = goldVal + silverVal + cash + other - debts;
-
-    $('zk-goldGVal').textContent   = goldG  > 0 ? '≈ '+fmt(goldVal)   : '';
-    $('zk-silverGVal').textContent = silvG  > 0 ? '≈ '+fmt(silverVal) : '';
-
-    const std = $('zk-nisab-std').value;
-    const nisabVal   = std === 'gold' ? gG * ZK.GOLD_NISAB_G : sG * ZK.SILVER_NISAB_G;
-    const nisabLabel = std === 'gold' ? 'Gold 85g' : 'Silver 595g';
-    const eligible   = total >= nisabVal && total > 0;
-
-    $('zk-totalWealth').textContent = fmt(Math.max(0, total));
-    $('zk-zakatDue').textContent    = eligible ? fmt(total * 0.025) : '—';
-
-    const st = $('zk-status');
-    if (total <= 0) {
-      st.className = 'zk-status no';
-      st.textContent = 'Enter your assets above to calculate Zakat';
-    } else if (eligible) {
-      st.className = 'zk-status ok';
-      st.textContent = '✓ Above Nisab — Zakat is obligatory';
-    } else {
-      st.className = 'zk-status no';
-      st.textContent = `✗ Below Nisab (${fmt(nisabVal)}) — Zakat is not obligatory`;
     }
+  } catch(e) {}
 
-    $('zk-bGold').textContent   = fmt(goldVal);
-    $('zk-bSilver').textContent = fmt(silverVal);
-    $('zk-bCash').textContent   = fmt(cash);
-    $('zk-bOther').textContent  = fmt(other);
-    $('zk-bDebts').textContent  = fmt(debts);
-    $('zk-bNisab').textContent  = fmt(nisabVal) + ' (' + nisabLabel + ')';
+  // ② Fallback: PKR-calibrated prices
+  goldUSD   = gUSD || 162.0;   // ~Rs 527,000/tola @ 279 PKR/USD
+  silverUSD = sUSD || 2.66;    // ~Rs 8,672/tola   @ 279 PKR/USD
+
+  // ③ Live FX via frankfurter.app (free, no key needed)
+  try {
+    const fx = await fetch(
+      'https://api.frankfurter.app/latest?from=USD&to=PKR,GBP,EUR,SAR,AED,BDT,INR',
+      { signal: AbortSignal.timeout(7000) }
+    );
+    if (fx.ok) {
+      const fd = await fx.json();
+      if (fd.rates) rates = { USD: 1, ...fd.rates };
+    }
+  } catch(e) {}
+
+  ready = true;
+  updateDisplay();
+  setBadge('gold',   gUSD ? 'live' : 'error', gUSD ? 'Live'   : 'Approx.');
+  setBadge('silver', sUSD ? 'live' : 'error', sUSD ? 'Live'   : 'Approx.');
+  calc();
+
+  btn.disabled = false;
+  icon.style.animation = '';
+}
+
+// ── Unit Converters ───────────────────────────────────────────────────────────
+function tolaToGram(m) {
+  const t = parseFloat($(m + 'Tola').value) || 0;
+  $(m + 'Grams').value = t ? (t * TOLA).toFixed(2) : '';
+  calc();
+}
+
+function ozToGram(m) {
+  const o = parseFloat($(m + 'Oz').value) || 0;
+  $(m + 'Grams').value = o ? (o * TROY).toFixed(2) : '';
+  calc();
+}
+
+// ── Main Calculator ───────────────────────────────────────────────────────────
+function calc() {
+  if (!ready) return;
+  const r  = rt();
+  const gG = goldUSD   * r;
+  const sG = silverUSD * r;
+
+  const gGrams = parseFloat($('goldGrams').value)   || 0;
+  const sGrams = parseFloat($('silverGrams').value) || 0;
+  const cash   = (parseFloat($('cashHome').value)||0) + (parseFloat($('bankBal').value)||0);
+  const other  = (parseFloat($('biz').value)||0) + (parseFloat($('recv').value)||0) + (parseFloat($('invest').value)||0);
+  const debts  = parseFloat($('debts').value) || 0;
+
+  const goldVal   = gGrams * gG;
+  const silverVal = sGrams * sG;
+  const total     = goldVal + silverVal + cash + other - debts;
+
+  $('goldGVal').textContent   = gGrams > 0 ? '≈ ' + fmt(goldVal)   : '';
+  $('silverGVal').textContent = sGrams > 0 ? '≈ ' + fmt(silverVal) : '';
+
+  const std      = $('nisab-std').value;
+  const nisabVal = std === 'gold' ? gG * G_NIS : sG * S_NIS;
+  const nisabLbl = std === 'gold' ? 'Gold 85g' : 'Silver 595g';
+  const eligible = total >= nisabVal && total > 0;
+
+  $('totalWealth').textContent = fmt(Math.max(0, total));
+  $('zakatDue').textContent    = eligible ? fmt(total * 0.025) : '—';
+
+  const st = $('status');
+  if (total <= 0) {
+    st.className   = 'status no';
+    st.textContent = 'Enter your assets above to calculate Zakat';
+  } else if (eligible) {
+    st.className   = 'status ok';
+    st.textContent = '✓ Above Nisab — Zakat is obligatory';
+  } else {
+    st.className   = 'status no';
+    st.textContent = `✗ Below Nisab (${fmt(nisabVal)}) — Zakat is not obligatory`;
   }
 
-  function zkHandleCurrency() { updateDisplay(); zkCalc(); }
-  function zkTola(m) {
-    const t = parseFloat($('zk-'+m+'Tola').value)||0;
-    $('zk-'+m+'Grams').value = t ? (t*ZK.TOLA_TO_GRAM).toFixed(2) : '';
-    zkCalc();
-  }
-  function zkOz(m) {
-    const o = parseFloat($('zk-'+m+'Oz').value)||0;
-    $('zk-'+m+'Grams').value = o ? (o*ZK.TROY_OZ_TO_GRAM).toFixed(2) : '';
-    zkCalc();
-  }
+  $('bGold').textContent   = fmt(goldVal);
+  $('bSilver').textContent = fmt(silverVal);
+  $('bCash').textContent   = fmt(cash);
+  $('bOther').textContent  = fmt(other);
+  $('bDebts').textContent  = fmt(debts);
+  $('bNisab').textContent  = fmt(nisabVal) + ' (' + nisabLbl + ')';
+}
 
-  // Expose to global scope for inline onclick handlers
-  window.zkFetch = zkFetch;
-  window.zkCalc  = zkCalc;
-  window.zkHandleCurrency = zkHandleCurrency;
-  window.zkTola  = zkTola;
-  window.zkOz    = zkOz;
+function handleCurrency() { updateDisplay(); calc(); }
 
-  // Auto-init
-  zkFetch();
-})();
+// ── Boot ──────────────────────────────────────────────────────────────────────
+fetchPrices();
 </script>
+
+</body>
+</html>
